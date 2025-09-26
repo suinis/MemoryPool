@@ -68,6 +68,9 @@ public:
 private:
     void* useMemory(size_t size);
     void freeMemory(void* ptr, size_t size);
+
+private:
+    HashBucket();
 };
 
 #include <MemoryPool.tcc>

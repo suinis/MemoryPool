@@ -27,7 +27,7 @@ template<typename T, typename... Args>
 T* HashBucket::newElement(Args&&... args) {
     T* ptr = nullptr;
 
-    if((ptr = ) != )
+    if((ptr = reinterpret_cast<void*>()) != )
 }
 
 template<typename T>

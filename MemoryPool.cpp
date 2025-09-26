@@ -59,9 +59,11 @@ MemoryPool& HashBucket::getMemoryPool(int index)
     
 }
 
-void *HashBucket::useMemory(size_t size)
-{
-    return nullptr;
+void* HashBucket::useMemory(size_t size)
+{   
+    if(size == 0) return nullptr;
+    if(size > MAX_SLOT_SIZE) return operator new(size);
+    return ;
 }
 
 void HashBucket::freeMemory(void *ptr, size_t size)

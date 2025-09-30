@@ -2,10 +2,16 @@
 
 #include <iostream>
 #include <vector>
+#include <array>
+#include <thread>
 #include <assert.h>
 using std::vector;
 using std::cout;
 using std::endl;
+using std::array;
+
+static const size_t FREE_LIST_NUM = 208;
+static const size_t MAX_BYTES = 256 * 1024;
 
 // 如果没有引用，返回的是一个右值，
 // 因为ObjNext返回值是一个拷贝，是一个临时对象，
@@ -17,6 +23,10 @@ static void*& ObjNext(void* obj) { // obj的头4/8字节
 
 class FreeList {
 public:
+    bool Empty() {
+        return _freeList == nullptr;
+    }
+
     void Push(void* obj) { // 回收空间
         assert(obj);
 

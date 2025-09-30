@@ -1,5 +1,6 @@
 #include "ObjectPool.h"
 #include "ThreadCache.h"
+#include "ConcurrentAlloc.h"
 
 struct TreeNode {
     int _val;
@@ -51,8 +52,29 @@ void TestObjectPool() {
     cout << "ObjectPool New Delete cost time: " << end2 - begin2 << endl; 
 }
 
+void AllocTest() {
+    auto allocfunc = [](int size){
+        for(int i = 0; i < 5; ++i) {
+            ConcurrentAlloc(size);
+        }
+    };
+    std::thread th1(allocfunc, 6);
+    std::thread th2(allocfunc, 7);
+
+    th1.join();
+    th2.join();
+}
+
+void UintTest() {
+    TestObjectPool();
+    cout << " ====================================" << endl;
+
+    AllocTest();
+    cout << " ====================================" << endl;
+}
+
 int main() {
     // for valgrind test:
     // valgrind --leak-check=full --show-leak-kinds=all --log-file=TestObjectPool_g ./Test
-    TestObjectPool();
+    UintTest();
 }

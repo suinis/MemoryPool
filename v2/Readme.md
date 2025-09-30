@@ -3,6 +3,8 @@ how to use
 test fixed-length memory pool for specific objects:
 
 test ThreadCache:
-cmake .
+cd ./v2/build
+rm -rf *
+cmake ..
 make
 ```

@@ -13,6 +13,7 @@ private:
     // FreeList _freeLists[FREE_LIST_NUM];
 };
 
+// TLS 线程本地存储
 static thread_local ThreadCache* pTLSThreadCache = nullptr;
 
 class SizeClass {
@@ -58,6 +59,23 @@ public:
             assert(false);
             return -1;
         }
+    }
+
+    static size_t NumMoveSize(size_t size) {
+        assert(size > 0);
+
+        int num = MAX_BYTES / size;
+        if(num > 512) {
+            // 当size = 8B时，num = 32K，量太多容易造成空间浪费，限制小空间申请的量
+            num = 512;
+        } else if(num < 2) {
+            // 当size = 256KB时，num = 1，如果一下需要1MB，则定为2可以减少调用次数
+            num = 2;
+        }
+
+        // 小对象一次批量上限高
+        // 大对象一次批量上限低
+        return num;
     }
 
 private:

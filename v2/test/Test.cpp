@@ -65,12 +65,42 @@ void AllocTest() {
     th2.join();
 }
 
+void ConcurrentAllocTest1() {
+    void* ptr1 = ConcurrentAlloc(5);
+    void* ptr2 = ConcurrentAlloc(8);
+    void* ptr3 = ConcurrentAlloc(4);
+    void* ptr4 = ConcurrentAlloc(6);
+    void* ptr5 = ConcurrentAlloc(3);
+
+    cout << ptr1 << endl;
+    cout << ptr2 << endl;
+    cout << ptr3 << endl;
+    cout << ptr4 << endl;
+    cout << ptr5 << endl;
+}
+
+void ConcurrentAllocTest2() {
+    for(int i = 0; i < 1024; ++i) {
+        void* ptr = ConcurrentAlloc(5);
+        cout << ptr << endl;
+    }
+
+    void* ptr = ConcurrentAlloc(3);
+    cout << "-----" << ptr << endl;
+}
+
 void UintTest() {
     TestObjectPool();
-    cout << " ====================================" << endl;
+    cout << "====================================" << endl;
 
-    AllocTest();
-    cout << " ====================================" << endl;
+    // AllocTest();
+    // cout << "====================================" << endl;
+
+    // ConcurrentAllocTest1();
+    // cout << "====================================" << endl;
+
+    ConcurrentAllocTest2();
+    cout << "====================================" << endl;
 }
 
 int main() {

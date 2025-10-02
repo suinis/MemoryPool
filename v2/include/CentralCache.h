@@ -1,5 +1,5 @@
 #pragma once
-#include "Common.h"
+#include "Common.hpp"
 #include "ThreadCache.h"
 
 // 饿汉单例
@@ -9,9 +9,12 @@ public:
         return _sInst;
     }
 
-    size_t FetchRangeObj(void*& start, void*& end, size_t batchNum, size_t size);
+    size_t FetchRangeObj(void*& start, void*& end, size_t batchNum, size_t alignSize);
 
     Span* GetOneSpan(SpanList& list, size_t size);
+
+    // 将tc归还的多块空间放入span
+    void ReleaseListToSpans(void* start, size_t alignSize);
 
 private:
     CentralCache() {};

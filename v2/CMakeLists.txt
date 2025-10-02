@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.10)
 project(MemoryPoolTest)
 
 set(CMAKE_CXX_STANDARD 17)
-set(MEMORY_POOL_SOURCE_DIR "${CMAKE_SOURCE_DIR}")
-set(MEMORY_POOL_TEST_DIR "${CMAKE_SOURCE_DIR}/test")
+# set(MEMORY_POOL_SOURCE_DIR "${CMAKE_SOURCE_DIR}")
+# set(MEMORY_POOL_TEST_DIR "${CMAKE_SOURCE_DIR}/test")
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -21,12 +21,13 @@ set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
 
 include_directories(
-    ${MEMORY_POOL_SOURCE_DIR}
-    ${MEMORY_POOL_TEST_DIR}
+    "${CMAKE_SOURCE_DIR}/com"
+    "${CMAKE_SOURCE_DIR}/include"
+    "${CMAKE_SOURCE_DIR}/src"
 )
 
 file(GLOB MY_SOURCES 
-    "${CMAKE_SOURCE_DIR}/*.cpp"
+    "${CMAKE_SOURCE_DIR}/src/*.cpp"
     "${CMAKE_SOURCE_DIR}/test/*.cpp"
 )
 add_executable(memory_pool_test 

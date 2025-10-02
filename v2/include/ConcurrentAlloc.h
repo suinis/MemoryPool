@@ -2,7 +2,7 @@
 #include "ThreadCache.h"
 
 void* ConcurrentAlloc(size_t size) {
-    cout << std::this_thread::get_id() << ": " << pTLSThreadCache << endl;
+    cout << "thread_id=" << std::this_thread::get_id() << ": " << pTLSThreadCache << endl;
 
     if(pTLSThreadCache == nullptr) {
         pTLSThreadCache = new ThreadCache;

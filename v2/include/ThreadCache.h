@@ -1,12 +1,16 @@
 #pragma once
-#include "Common.h"
+#include "Common.hpp"
 
 class ThreadCache {
 public:
     void* Allocate(size_t size); // 线程申请size大小的空间
     void Deallocate(void* obj, size_t size); // 回收线程中大小为size的obj空间
 
+    // tc下index下标链表空间不够，向cc中申请空间
     void* FetchFromCentralCache(size_t index, size_t alignSize);
+
+    // tc向cc中归还空间
+    void ListTooLong(FreeList& list, size_t size);
 
 private:
     std::array<FreeList, FREE_LIST_NUM> _freeLists;
@@ -76,6 +80,20 @@ public:
         // 小对象一次批量上限高
         // 大对象一次批量上限低
         return num;
+    }
+
+    static size_t NumMovePage(size_t alignSize) {
+        // 当cc中没有span向tc提供小块空间时，cc需要向pc申请一块span
+        // 为了保证后续申请空间不浪费/因为太小而导致频繁申请，需要计算出合理的span，通过页数反映
+
+        // tc向cc申请的alignSize大小块时，允许申请的最大块数
+        size_t num = NumMoveSize(alignSize);
+
+        size_t npage = (num * alignSize) >> PAGE_SHIFT;
+        
+        // 当alignSize = 8B时，num = 512，npage = 4KB / 8KB = 0，申请半页，凑整为1页
+        if(npage == 0) npage = 1;
+        return npage;
     }
 
 private:

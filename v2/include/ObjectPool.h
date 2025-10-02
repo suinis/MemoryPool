@@ -23,27 +23,7 @@
 // A fixed-length memory pool for specific objects
 
 #pragma once
-
-#include "Common.h"
-
-#ifdef _WIN32 // Windows下的系统调用接口
-    #include <Windows.h>
-#else 
-    #include <unistd.h> // brk, sbrk
-    #include <sys/mman.h> // mmap, munmap
-#endif
-
-inline static void* SystemAlloc(size_t kpage) { // 每页按2 ^ 13 = 8KB
-#ifdef _WIN32
-    void* ptr = VirtualAlloc(0, kpage << 13, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
-#else
-    void* ptr = sbrk(kpage << 13); // kpage * 8KB
-    // void* ptr = mmap64()
-#endif
-
-    if(ptr == nullptr) throw std::bad_alloc();
-    return ptr;
-}
+#include "Common.hpp"
 
 // template<size_t N> 定长内存池可以采用非类型模板参数
 template<class T> // 这里采用类型模板参数，方便针对不同的类生成定长内存池
